@@ -93,6 +93,20 @@ export const CheckRoleInPermissionRole = async (role_id) => {
         }
     })
 }
+export const FindOneFaculty = async (faculty_id) => {
+    return new Promise(async (resovle, reject) => {
+        try {
+            const checkFaculty = "Select * from faculty where faculty_id=?";
+            connected.query(checkFaculty, faculty_id, (err, result) => {
+                if (err) return reject(EMessage.NotFound + err)
+                if (!result[0]) return reject(EMessage.NotFound)
+                return resovle(result[0])
+            })
+        } catch (error) {
+            return reject(error);
+        }
+    })
+}
 export const FindOneUser = async (user_id) => {
     return new Promise(async (resovle, reject) => {
         try {
@@ -108,7 +122,7 @@ export const FindOneUser = async (user_id) => {
     })
 }
 export const GenerateToken = async (data) => {
-    return new Promise(async (resovle, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             const payload = {
                 id: data,
@@ -120,7 +134,17 @@ export const GenerateToken = async (data) => {
             const refreshToken = jwt.sign(payload_refresh, SECRET_KEY_REFRESH, {
                 expiresIn: "5h",
             });
-            resovle({ token, refreshToken });
+             // ຖອດລະຫັດ token ເພື່ອເອົາຄ່າ exp
+             const decoded = jwt.decode(token);
+             const decodedRefresh = jwt.decode(refreshToken);
+             
+             resolve({ 
+                 token, 
+                 refreshToken,
+                 tokenExpireAt: decoded.exp, // ປ່ຽນຈາກວິນາທີເປັນມິລິວິນາທີ
+                 refreshTokenExpireAt: decodedRefresh.exp 
+             });
+ 
         } catch (error) {
             reject(error);
         }
