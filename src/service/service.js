@@ -8,7 +8,6 @@ import { EMessage } from "./message.js"
 export const VerifyToken = async (token) => {
     return new Promise(async (resovle, reject) => {
         try {
-
             jwt.verify(token, SECRET_KEY, async (err, decode) => {
                 if (err) return reject(err);
                 const checkRole = `select * from role_user  
@@ -93,6 +92,20 @@ export const CheckRoleInPermissionRole = async (role_id) => {
         }
     })
 }
+export const FindOneOffice = async (office_id) => {
+    return new Promise(async (resovle, reject) => {
+        try {
+            const checkOffice = "Select * from office where office_id=?";
+            connected.query(checkOffice, office_id, (err, result) => {
+                if (err) return reject(EMessage.NotFound + err)
+                if (!result[0]) return reject(EMessage.NotFound)
+                return resovle(result[0])
+            })
+        } catch (error) {
+            return reject(error);
+        }
+    })
+}
 export const FindOneFaculty = async (faculty_id) => {
     return new Promise(async (resovle, reject) => {
         try {
@@ -107,6 +120,7 @@ export const FindOneFaculty = async (faculty_id) => {
         }
     })
 }
+
 export const FindOneUser = async (user_id) => {
     return new Promise(async (resovle, reject) => {
         try {

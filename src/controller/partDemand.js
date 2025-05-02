@@ -3,11 +3,11 @@ import { EMessage, SMessage } from "../service/message.js";
 import { SendCreate, SendError, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid"
-import { DecryptData, EncryptData, FindOneEmail, FindOneFaculty, FindOneOffice, GenerateToken } from "../service/service.js";
-export default class OfficeController {
+import { DecryptData, EncryptData, FindOneEmail, FindOneFaculty, FindOnepart_demand, GenerateToken } from "../service/service.js";
+export default class PartDemandController {
     static async SelectAll(req, res) {
         try {
-            const select = "select * from office";
+            const select = "select * from part_demand";
             connected.query(select, (err, result) => {
                 if (err) return SendError(res, 404, EMessage.ESelectAll, err);
                 if (!result[0]) return SendError(res, 404, EMessage.NotFound);
@@ -19,11 +19,11 @@ export default class OfficeController {
     }
     static async SelectOne(req, res) {
         try {
-            const office_id = req.params.office_id;
-            if (!office_id) return SendError(res, 400, EMessage.BadRequest, "office_id");
-            await FindOneOffice(office_id);
-            const select = "select * from office where office_id=?";
-            connected.query(select, office_id, (err, result) => {
+            const part_demand_id = req.params.part_demand_id;
+            if (!part_demand_id) return SendError(res, 400, EMessage.BadRequest, "part_demand_id");
+            await FindOnepart_demand(part_demand_id);
+            const select = "select * from part_demand where part_demand_id=?";
+            connected.query(select, part_demand_id, (err, result) => {
                 if (err) return SendError(res, 404, EMessage.NotFound, err);
                 if (!result[0]) return SendError(res, 404, EMessage.NotFound);
                 return SendSuccess(res, SMessage.SelectOne, result[0]);
@@ -34,13 +34,13 @@ export default class OfficeController {
     }
     static async Insert(req, res) {
         try {
-            const { office_name } = req.body;
-            if (!office_name) {
-                return SendError(res, 400, EMessage.BadRequest, "office_name")
+            const { part_demand_name } = req.body;
+            if (!part_demand_name) {
+                return SendError(res, 400, EMessage.BadRequest, "part_demand_name")
             }
-            const office_id = uuidv4();
-            const insert = "insert into office (office_id,office_name) values (?,?)";
-            connected.query(insert, [office_id, office_name], (err) => {
+            const part_demand_id = uuidv4();
+            const insert = "insert into part_demand (part_demand_id,part_demand_name) values (?,?)";
+            connected.query(insert, [part_demand_id, part_demand_name], (err) => {
                 if (err) return SendError(res, 404, EMessage.EInsert, err);
                 return SendCreate(res, SMessage.Insert);
             })
@@ -48,17 +48,17 @@ export default class OfficeController {
             return SendError(res, 500, EMessage.ServerInternal, error)
         }
     }
-    static async UpdateOffice(req, res) {
+    static async UpdatePartDemand(req, res) {
         try {
-            const office_id = req.params.office_id;
-            if (!office_id) return SendError(res, 400, EMessage.BadRequest, "office_id");
-            await FindOneOffice(office_id);
-            const { office_name } = req.body;
-            if (!office_name) {
-                return SendError(res, 400, EMessage.BadRequest, "office_name")
+            const part_demand_id = req.params.part_demand_id;
+            if (!part_demand_id) return SendError(res, 400, EMessage.BadRequest, "part_demand_id");
+            await FindOnePartDemand(part_demand_id);
+            const { part_demand_name } = req.body;
+            if (!part_demand_name) {
+                return SendError(res, 400, EMessage.BadRequest, "part_demand_name")
             }
-            const update = "update office set office_name=? where office_id=?";
-            connected.query(update, [office_name, office_id], (err) => {
+            const update = "update part_demand set part_demand_name=? where part_demand_id=?";
+            connected.query(update, [part_demand_name, part_demand_id], (err) => {
                 if (err) return SendError(res, 404, EMessage.EUpdate, err);
                 return SendSuccess(res, SMessage.Update);
             })
@@ -66,13 +66,13 @@ export default class OfficeController {
             return SendError(res, 500, EMessage.ServerInternal, error)
         }
     }
-    static async DeleteOffice(req, res) {
+    static async Deletepart_demand(req, res) {
         try {
-            const office_id = req.params.office_id;
-            if (!office_id) return SendError(res, 400, EMessage.BadRequest, "office_id");
-            await FindOneOffice(office_id);
-            const deleteOffice = "Delete from office where office_id=?";
-            connected.query(deleteOffice, office_id, (err) => {
+            const part_demand_id = req.params.part_demand_id;
+            if (!part_demand_id) return SendError(res, 400, EMessage.BadRequest, "part_demand_id");
+            await FindOnepart_demand(part_demand_id);
+            const deletepart_demand = "Delete from part_demand where part_demand_id=?";
+            connected.query(deletepart_demand, part_demand_id, (err) => {
                 if (err) return SendError(res, 404, EMessage.EDelete, err);
                 return SendSuccess(res, SMessage.Delete);
             })

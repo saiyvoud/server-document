@@ -3,7 +3,7 @@ import { EMessage, SMessage } from "../service/message.js";
 import { SendCreate, SendError, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid"
-import { DecryptData, EncryptData, FindOneEmail, FindOneFaculty, GenerateToken } from "../service/service.js";
+import { FindOneFaculty, } from "../service/service.js";
 export default class FacultController {
     static async SelectAll(req, res) {
         try {
@@ -19,7 +19,7 @@ export default class FacultController {
     }
     static async SelectOne(req, res) {
         try {
-            const faculty_id = req.params;
+            const faculty_id = req.params.faculty_id;
             await FindOneFaculty(faculty_id);
             const selectOne = 'select * from faculty where faculty_id=?'
             connected.query(selectOne, faculty_id, (err, result) => {
@@ -54,7 +54,7 @@ export default class FacultController {
     }
     static async UpdateFaculty(req, res) {
         try {
-            const faculty_id = req.params;
+            const faculty_id = req.params.faculty_id;
             await FindOneFaculty(faculty_id);
             const { name, phoneNumber } = req.body;
             const validate = await ValidateData({ name, phoneNumber });
@@ -73,12 +73,12 @@ export default class FacultController {
     }
     static async DeleteFaculty(req, res) {
         try {
-            const faculty_id = req.params;
+            const faculty_id = req.params.faculty_id;
             await FindOneFaculty(faculty_id);
             const update = "Delete from faculty where faculty_id=?";
             connected.query(update, faculty_id, (err,res) => {
                 if (err) return SendError(res, 404, EMessage.NotFound, err);
-                return SendSuccess(res, SMessage.Update);
+                return SendSuccess(res, SMessage.Delete);
             })
         } catch (error) {
             return SendError(res, 500, EMessage.ServerInternal, error);
