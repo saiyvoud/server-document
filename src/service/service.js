@@ -120,7 +120,34 @@ export const FindOneFaculty = async (faculty_id) => {
         }
     })
 }
-
+export const FindOnePartDemand = async (part_demand_id) => {
+    return new Promise(async (resovle, reject) => {
+        try {
+            const checkPartDemand = "Select * from part_demand where part_demand_id=?";
+            connected.query(checkPartDemand, part_demand_id, (err, result) => {
+                if (err) return reject(EMessage.NotFound + err)
+                if (!result[0]) return reject(EMessage.NotFound)
+                return resovle(result[0])
+            })
+        } catch (error) {
+            return reject(error);
+        }
+    })
+}
+export const FindOnePartSuppile = async (part_suppile_id) => {
+    return new Promise(async (resovle, reject) => {
+        try {
+            const checkPartSuppile = "Select * from part_suppile where part_suppile_id=?";
+            connected.query(checkPartSuppile, part_suppile_id, (err, result) => {
+                if (err) return reject(EMessage.NotFound + err)
+                if (!result[0]) return reject(EMessage.NotFound)
+                return resovle(result[0])
+            })
+        } catch (error) {
+            return reject(error);
+        }
+    })
+}
 export const FindOneUser = async (user_id) => {
     return new Promise(async (resovle, reject) => {
         try {

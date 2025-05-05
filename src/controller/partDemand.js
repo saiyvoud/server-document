@@ -3,7 +3,7 @@ import { EMessage, SMessage } from "../service/message.js";
 import { SendCreate, SendError, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid"
-import { DecryptData, EncryptData, FindOneEmail, FindOneFaculty, FindOnepart_demand, GenerateToken } from "../service/service.js";
+import {FindOnePartDemand} from "../service/service.js";
 export default class PartDemandController {
     static async SelectAll(req, res) {
         try {
@@ -21,7 +21,7 @@ export default class PartDemandController {
         try {
             const part_demand_id = req.params.part_demand_id;
             if (!part_demand_id) return SendError(res, 400, EMessage.BadRequest, "part_demand_id");
-            await FindOnepart_demand(part_demand_id);
+            await FindOnePartDemand(part_demand_id);
             const select = "select * from part_demand where part_demand_id=?";
             connected.query(select, part_demand_id, (err, result) => {
                 if (err) return SendError(res, 404, EMessage.NotFound, err);
@@ -66,11 +66,11 @@ export default class PartDemandController {
             return SendError(res, 500, EMessage.ServerInternal, error)
         }
     }
-    static async Deletepart_demand(req, res) {
+    static async DeletePartDemend(req, res) {
         try {
             const part_demand_id = req.params.part_demand_id;
             if (!part_demand_id) return SendError(res, 400, EMessage.BadRequest, "part_demand_id");
-            await FindOnepart_demand(part_demand_id);
+            await FindOnePartDemand(part_demand_id);(part_demand_id);
             const deletepart_demand = "Delete from part_demand where part_demand_id=?";
             connected.query(deletepart_demand, part_demand_id, (err) => {
                 if (err) return SendError(res, 404, EMessage.EDelete, err);
