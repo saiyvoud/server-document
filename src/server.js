@@ -5,6 +5,7 @@ import fileUpload from "express-fileupload";
 import "./config/db_mysql.js"
 import { PORT } from "./config/globayKey.js";
 import router from "./router/route.js";
+import fileUpload from "express-fileupload";
 const app = express();
 app.use(cors()); // ໃຫ້ສາມາດຮັບ Request ຫລື ຮັບຂໍ້ມູນຈາກ Client ຫລື front end ຫລື ແອັບ ໄດ້
 app.use(fileUpload()); // ໄວ້ upload file ຜ່ານ formData

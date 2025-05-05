@@ -134,6 +134,34 @@ export const FindOnePartDemand = async (part_demand_id) => {
         }
     })
 }
+export const FindOneDocumentIn = async (document_in_id) => {
+    return new Promise(async (resovle, reject) => {
+        try {
+            const checkPartSuppile = "Select * from document_in where document_in_id=?";
+            connected.query(checkPartSuppile, document_in_id, (err, result) => {
+                if (err) return reject(EMessage.NotFound + err)
+                if (!result[0]) return reject(EMessage.NotFound)
+                return resovle(result[0])
+            })
+        } catch (error) {
+            return reject(error);
+        }
+    })
+}
+export const FindOneDocumentOut = async (document_out_id) => {
+    return new Promise(async (resovle, reject) => {
+        try {
+            const checkPartSuppile = "Select * from document_out where document_out_id=?";
+            connected.query(checkPartSuppile, document_out_id, (err, result) => {
+                if (err) return reject(EMessage.NotFound + err)
+                if (!result[0]) return reject(EMessage.NotFound)
+                return resovle(result[0])
+            })
+        } catch (error) {
+            return reject(error);
+        }
+    })
+}
 export const FindOnePartSuppile = async (part_suppile_id) => {
     return new Promise(async (resovle, reject) => {
         try {
