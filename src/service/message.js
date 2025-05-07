@@ -4,6 +4,12 @@ export const RoleUser = {
   admin: "admin",
   staff: "staff"
 }
+export const StatusDocument = {
+  await: "await",
+  padding: "padding",
+  success: "success",
+  cancel: "cancel"
+}
 export const PermissionRole = {
   insert: "INSERT",
   update: "UPDATE",
@@ -19,6 +25,7 @@ export const SMessage = { // success message
   Update: "Update Success",
   Delete: "Delete Success",
   Already: "Already",
+  Search: "Search Success"
 }
 export const EMessage = { // Error Message
   BadRequest: "BadRequest",

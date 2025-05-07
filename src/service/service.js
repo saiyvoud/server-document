@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js"
-import { SECRET_KEY, SECRET_KEY_REFRESH } from "../config/globayKey.js"
+import { SECRET_KEY, SECRET_KEY_REFRESH } from "../config/globalKey.js"
 import jwt from "jsonwebtoken"
 import connected from "../config/db_mysql.js"
 import { EMessage } from "./message.js"
