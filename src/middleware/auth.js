@@ -14,7 +14,6 @@ export const auth = async (req, res, next) => {
             return SendError(res, 401, EMessage.Unaunthorization);
         }
         req.user = verify;
-      
         next();
     } catch (error) {
         return SendError(res, 500, EMessage.ServerInternal, error);

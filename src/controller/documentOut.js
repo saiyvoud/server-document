@@ -62,7 +62,7 @@ export default class DocumentOutController {
             await FindOneDocumentIn(document_in_id)
             await FindOnePartSuppile(part_suppile_id);
             const document_out_id = uuidv4();
-            const insert = "insert into document_out (document_out_id,numberID, ,document_in_id, part_suppile_id, faculty_id,status) values (?,?,?,?,?)";
+            const insert = "insert into document_out (document_out_id,numberID, document_in_id, part_suppile_id, faculty_id,status) values (?,?,?,?,?)";
             const numberID = Math.floor(10000 + Math.random() * 90000);
             connected.query(insert, [document_out_id, numberID, document_in_id, part_suppile_id, faculty_id, StatusDocument.padding], (err) => {
                 if (err) return SendError(res, 404, EMessage.EInsert, err);

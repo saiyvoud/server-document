@@ -29,19 +29,19 @@ router.post("/permission_role/insert", PermissionRoleController.Insert)
 router.get("/permission_role/selAll", auth, PermissionRoleController.SelectAll)
 //------ Faculty ------
 router.get("/faculty/selAll",auth,FacultController.SelectAll);
-router.get("/faculty/selOne",auth,FacultController.SelectOne);
+router.get("/faculty/selOne/:faculty_id",auth,FacultController.SelectOne);
 router.post("/faculty/insert",auth,FacultController.Insert);
 router.put("/faculty/update/:faculty_id",auth,FacultController.UpdateFaculty);
 router.delete("/faculty/delete/:faculty_id",auth,FacultController.DeleteFaculty);
 //------ Office ------
 router.get("/office/selAll",auth,OfficeController.SelectAll);
-router.get("/office/selOne",auth,OfficeController.SelectOne);
+router.get("/office/selOne/:office_id",auth,OfficeController.SelectOne);
 router.post("/office/insert",auth,OfficeController.Insert);
 router.put("/office/update/:office_id",auth,OfficeController.UpdateOffice);
 router.delete("/office/delete/:office_id",auth,OfficeController.DeleteOffice);
 //------ Part Demand ------
 router.get("/part_demand/selAll",auth,PartDemandController.SelectAll);
-router.get("/part_demand/selOne",auth,PartDemandController.SelectOne);
+router.get("/part_demand/selOne/:part_demand_id",auth,PartDemandController.SelectOne);
 router.post("/part_demand/insert",auth,PartDemandController.Insert);
 router.put("/part_demand/update/:part_demand_id",auth,PartDemandController.UpdatePartDemand);
 router.delete("/part_demand/delete/:part_demand_id",auth,PartDemandController.DeletePartDemend);

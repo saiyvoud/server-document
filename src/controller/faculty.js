@@ -76,11 +76,12 @@ export default class FacultController {
             const faculty_id = req.params.faculty_id;
             await FindOneFaculty(faculty_id);
             const update = "Delete from faculty where faculty_id=?";
-            connected.query(update, faculty_id, (err,res) => {
+            connected.query(update, faculty_id, (err) => {
                 if (err) return SendError(res, 404, EMessage.NotFound, err);
                 return SendSuccess(res, SMessage.Delete);
             })
         } catch (error) {
+            console.log(error);
             return SendError(res, 500, EMessage.ServerInternal, error);
         }
     }
