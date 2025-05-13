@@ -6,19 +6,19 @@ import { v4 as uuidv4 } from "uuid"
 import { FindOneDocumentIn, FindOnePartDemand } from "../service/service.js";
 import { UploadImageToCloud } from "../config/cloudinary.js";
 export default class DocumentInController {
-    static async Search(req,res){
+    static async Search(req, res) {
         try {
-            const search = req.query.search;  
+            const search = req.query.search;
             const query = `SELECT * FROM document_in WHERE numberID LIKE ?`;
-            const values = [`%${search}%`]; 
-            connected.query(query,values, (err, result) => {
-              if (err) return SendError(res, 404, EMessage.NotFound, err);
-              if (!result[0]) return SendError(res, 404, EMessage.NotFound);
-              return SendSuccess(res, SMessage.Search, result);
+            const values = [`%${search}%`];
+            connected.query(query, values, (err, result) => {
+                if (err) return SendError(res, 404, EMessage.NotFound, err);
+                if (!result[0]) return SendError(res, 404, EMessage.NotFound);
+                return SendSuccess(res, SMessage.Search, result);
             });
-          } catch (error) {
+        } catch (error) {
             return SendError(res, 500, EMessage.Eserver, error);
-          }
+        }
     }
     static async SelectAll(req, res) {
         try {
@@ -41,7 +41,7 @@ export default class DocumentInController {
             await FindOneDocumentIn(document_in_id);
             const select = `select * from document_in 
             INNER JOIN part_demand on document_in.part_demand_id COLLATE utf8mb4_general_ci = part_demand.part_demand_id
-            INNER JOIN faculty on document_in.faculty_id COLLATE utf8mb4_general_ci = faculty.faculty_id WHERE document_id=?`;
+            INNER JOIN faculty on document_in.faculty_id COLLATE utf8mb4_general_ci = faculty.faculty_id WHERE document_in_id=?`;
             connected.query(select, document_in_id, (err, result) => {
                 if (err) return SendError(res, 404, EMessage.NotFound, err);
                 if (!result[0]) return SendError(res, 404, EMessage.NotFound);
@@ -53,8 +53,8 @@ export default class DocumentInController {
     }
     static async Insert(req, res) {
         try {
-            const { titile, part_demand_id, faculty_id } = req.body;
-            const validate = await ValidateData({ titile, part_demand_id, faculty_id });
+            const { title, part_demand_id, faculty_id, numberID, } = req.body;
+            const validate = await ValidateData({ title, part_demand_id, faculty_id, numberID });
             if (validate.length > 0) {
                 return SendError(res, 400, EMessage.BadRequest, validate.join(","))
             }
@@ -62,20 +62,23 @@ export default class DocumentInController {
             if (!fileData || !fileData.files) {
                 return SendError(res, 400, EMessage.BadRequest, "files")
             }
-            const files_url = await UploadImageToCloud(fileData.files.data, fileData.files.minitype);
-            if (!files_url) return SendError(res, 400, EMessage.NotFound, "File");
             await FindOnePartDemand(part_demand_id);
+            const files_url = await UploadImageToCloud(fileData.files.data, fileData.files.mimetype);
+            if (!files_url) { 
+                return SendError(res, 400, EMessage.NotFound, "File");
+             }
             const document_in_id = uuidv4();
-            const insert = `insert into document_in (document_in_id, titile, numberID, part_demand_id,
-                 faculty_id,files,status) values (?,?,?,?,?,?)`;
-            const numberID = Math.floor(10000 + Math.random() * 90000);
-            connected.query(insert, [document_in_id, titile,
+            const insert = `insert into document_in (document_in_id, title, numberID, part_demand_id,
+                 faculty_id,files,status) values (?,?,?,?,?,?,?)`;
+            // const numberID = Math.floor(10000 + Math.random() * 90000);
+            connected.query(insert, [document_in_id, title,
                 numberID, part_demand_id,
                 faculty_id, files_url, StatusDocument.await], (err) => {
                     if (err) return SendError(res, 404, EMessage.EInsert, err);
                     return SendCreate(res, SMessage.Insert);
                 })
         } catch (error) {
+            console.log(error);
             return SendError(res, 500, EMessage.ServerInternal, error)
         }
     }
@@ -84,13 +87,13 @@ export default class DocumentInController {
             const document_in_id = req.params.document_in_id;
             if (!document_in_id) return SendError(res, 400, EMessage.BadRequest, "document_in_id");
             await FindOneDocumentIn(document_in_id);
-            const { titile, numberID, part_demand_id, faculty_id } = req.body;
-            const validate = await ValidateData({ titile, numberID, part_demand_id, faculty_id });
+            const { title, numberID, part_demand_id, faculty_id } = req.body;
+            const validate = await ValidateData({ title, numberID, part_demand_id, faculty_id });
             if (validate.length > 0) {
                 return SendError(res, 400, EMessage.BadRequest, validate.join(","))
             }
-            const update = "update document_in set titile=?, numberID=?, part_demand_id=?, faculty_id=? where document_in_id=?";
-            connected.query(update, [titile, numberID, part_demand_id, faculty_id, document_in_id], (err) => {
+            const update = "update document_in set title=?, numberID=?, part_demand_id=?, faculty_id=? where document_in_id=?";
+            connected.query(update, [title, numberID, part_demand_id, faculty_id, document_in_id], (err) => {
                 if (err) return SendError(res, 404, EMessage.EUpdate, err);
                 return SendSuccess(res, SMessage.Update);
             })
@@ -104,7 +107,7 @@ export default class DocumentInController {
             if (!document_in_id) return SendError(res, 400, EMessage.BadRequest, "document_in_id");
             await FindOneDocumentIn(document_in_id);
             const { status } = req.body;
-            const checkStatus = Object.assign(StatusDocument);
+            const checkStatus = Object.values(StatusDocument);
             if (!checkStatus.includes(status)) {
                 return SendError(res, 400, EMessage.BadRequest);
             }
@@ -114,6 +117,7 @@ export default class DocumentInController {
                 return SendSuccess(res, SMessage.Update);
             })
         } catch (error) {
+            console.log(error);
             return SendError(res, 500, EMessage.ServerInternal, error)
         }
     }

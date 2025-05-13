@@ -22,8 +22,8 @@ export const UploadImageToCloud = async (files, type, oldImg) => {
     const base64 = files.toString("base64");
     const imgPath = `data:${type};base64,${base64}`;
     const cloudinaryUpload = await cloudinary.v2.uploader.upload(imgPath, {
-      //   public_id: `IMG_${Date.now()}`,
-      folder: "images1",
+      public_id: `IMG_${Date.now()}`,
+      // folder: "images1",
       resource_type: "image",
     });
     return cloudinaryUpload.url;

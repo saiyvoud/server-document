@@ -47,24 +47,24 @@ router.put("/part_demand/update/:part_demand_id",auth,PartDemandController.Updat
 router.delete("/part_demand/delete/:part_demand_id",auth,PartDemandController.DeletePartDemend);
 //------ Part Suppile ------
 router.get("/part_suppile/selAll",auth,PartSuppileController.SelectAll);
-router.get("/part_suppile/selOne",auth,PartSuppileController.SelectOne);
+router.get("/part_suppile/selOne/:part_suppile_id",auth,PartSuppileController.SelectOne);
 router.post("/part_suppile/insert",auth,PartSuppileController.Insert);
 router.put("/part_suppile/update/:part_suppile_id",auth,PartSuppileController.UpdatePartSuppile);
 router.delete("/part_suppile/delete/:part_suppile_id",auth,PartSuppileController.DeletePartSuppile);
 //------ Document In ------
-router.get("/document_in/selAll",auth,DocumentInController.Search);
+router.get("/document_in/search",auth,DocumentInController.Search);
 router.get("/document_in/selAll",auth,DocumentInController.SelectAll);
-router.get("/document_in/selOne",auth,DocumentInController.SelectOne);
+router.get("/document_in/selOne/:document_in_id",auth,DocumentInController.SelectOne);
 router.post("/document_in/insert",auth,DocumentInController.Insert);
 router.put("/document_in/update/:document_in_id",auth,DocumentInController.UpdateDocumentIn);
 router.put("/document_in/updateStatus/:document_in_id",auth,DocumentInController.UpdateStatus);
 router.delete("/document_in/delete/:document_in_id",auth,DocumentInController.DeleteDocumentIn);
 //------ Document Out ------
-router.get("/document_in/selAll",auth,DocumentOutController.Search);
-router.get("/document_in/selAll",auth,DocumentOutController.SelectAll);
-router.get("/document_in/selOne",auth,DocumentOutController.SelectOne);
-router.post("/document_in/insert",auth,DocumentOutController.Insert);
-router.put("/document_in/updateStatus/:document_in_id",auth,DocumentOutController.UpdateStatus);
-router.delete("/document_in/delete/:document_in_id",auth,DocumentOutController.DeleteDocumentOut);
+router.get("/document_out/search",auth,DocumentOutController.Search);
+router.get("/document_out/selAll",auth,DocumentOutController.SelectAll);
+router.get("/document_out/selOne/:document_out_id",auth,DocumentOutController.SelectOne);
+router.post("/document_out/insert",auth,DocumentOutController.Insert);
+router.put("/document_out/updateStatus/:document_out_id",auth,DocumentOutController.UpdateStatus);
+router.delete("/document_out/delete/:document_out_id",auth,DocumentOutController.DeleteDocumentOut);
 export default router;
     
